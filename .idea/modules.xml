@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MyProjects-SocketClinet.iml" filepath="$PROJECT_DIR$/.idea/modules/MyProjects-SocketClinet.iml" group="SocketClinet" />
       <module fileurl="file://$PROJECT_DIR$/SocketClinet.iml" filepath="$PROJECT_DIR$/SocketClinet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SocketClinet-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SocketClinet-app.iml" group="SocketClinet/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

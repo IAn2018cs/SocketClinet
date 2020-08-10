@@ -1,11 +1,12 @@
 package cn.ian2018.socketclinet.adapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
 
     private List<Msg> mMsgList;
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout liftLayout;
         private LinearLayout rightLayout;
         private TextView leftMsg;
@@ -60,7 +61,7 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
             holder.rightLayout.setVisibility(View.GONE);
 
             holder.leftMsg.setText(msg.getContent());
-            holder.tv_left_info.setText(msg.getIp()+"  " + msg.getTime());
+            holder.tv_left_info.setText(msg.getIp() + "  " + msg.getTime());
         }
         // 如果是发送消息 就显示右边的布局 隐藏左边的布局
         if (msg.getType() == Msg.TYPE_SEND) {
@@ -68,7 +69,7 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
             holder.rightLayout.setVisibility(View.VISIBLE);
 
             holder.rightMsg.setText(msg.getContent());
-            holder.tv_right_info.setText(msg.getIp()+"  " + msg.getTime());
+            holder.tv_right_info.setText(msg.getIp() + "  " + msg.getTime());
         }
     }
 

@@ -5,7 +5,7 @@
     android:background="#d8e0e8"
     android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chart_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
