@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import cn.ian2018.socketclinet.R;
-import cn.ian2018.socketclinet.modle.Msg;
+import cn.ian2018.socketclinet.db.data.MsgInfo;
 
 
 /**
@@ -20,7 +20,7 @@ import cn.ian2018.socketclinet.modle.Msg;
 
 public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
 
-    private List<Msg> mMsgList;
+    private List<MsgInfo> mMsgList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout liftLayout;
@@ -41,7 +41,7 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
         }
     }
 
-    public MsgAdapter(List<Msg> msgList) {
+    public MsgAdapter(List<MsgInfo> msgList) {
         mMsgList = msgList;
     }
 
@@ -54,22 +54,22 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Msg msg = mMsgList.get(position);
+        MsgInfo msg = mMsgList.get(position);
         // 如果是收到消息 就显示左边的布局 隐藏右边的布局
-        if (msg.getType() == Msg.TYPE_RECEIVED) {
+        if (msg.getType() == MsgInfo.TYPE_RECEIVED) {
             holder.liftLayout.setVisibility(View.VISIBLE);
             holder.rightLayout.setVisibility(View.GONE);
 
-            holder.leftMsg.setText(msg.getContent());
-            holder.tv_left_info.setText(msg.getIp() + "  " + msg.getTime());
+            holder.leftMsg.setText(msg.getMsg());
+            holder.tv_left_info.setText(msg.getIp() + "  " + msg.getFormatTime());
         }
         // 如果是发送消息 就显示右边的布局 隐藏左边的布局
-        if (msg.getType() == Msg.TYPE_SEND) {
+        if (msg.getType() == MsgInfo.TYPE_SEND) {
             holder.liftLayout.setVisibility(View.GONE);
             holder.rightLayout.setVisibility(View.VISIBLE);
 
-            holder.rightMsg.setText(msg.getContent());
-            holder.tv_right_info.setText(msg.getIp() + "  " + msg.getTime());
+            holder.rightMsg.setText(msg.getMsg());
+            holder.tv_right_info.setText(msg.getIp() + "  " + msg.getFormatTime());
         }
     }
 

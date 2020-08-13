@@ -48,7 +48,7 @@ public class KeyUtil {
             return Base64.encodeToString(secretKey.getEncoded(), DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
     }
 
@@ -59,6 +59,7 @@ public class KeyUtil {
 
     /**
      * AES 加密
+     *
      * @param key
      * @param plainData
      * @return
@@ -79,7 +80,7 @@ public class KeyUtil {
             return Base64.encodeToString(cipherBytes, DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
     }
 
@@ -144,7 +145,7 @@ public class KeyUtil {
             return Base64.encodeToString(bytes, DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
     }
 
@@ -174,7 +175,7 @@ public class KeyUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return new Pair<>("", "");
     }
 
     public static String signature(String privateKey, byte[] plainData) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
