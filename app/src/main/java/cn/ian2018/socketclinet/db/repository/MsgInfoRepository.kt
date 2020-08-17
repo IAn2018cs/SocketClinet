@@ -18,8 +18,18 @@ class MsgInfoRepository private constructor(private val msgInfoDao: MsgInfoDao) 
         }
     }
 
-    suspend fun getAllMsg() = withContext(Dispatchers.IO) {
-        return@withContext msgInfoDao.getAllMsg()
+    fun insertMsgList(msg: List<MsgInfo>) {
+        CoroutineScope(Dispatchers.IO).launch {
+            msgInfoDao.insertMsgList(msg)
+        }
+    }
+
+    suspend fun getAllMsg(fromId: String) = withContext(Dispatchers.IO) {
+        return@withContext msgInfoDao.getAllMsg(fromId)
+    }
+
+    suspend fun getGroupMsg(groupId: Int) = withContext(Dispatchers.IO) {
+        return@withContext msgInfoDao.getGroupMsg(groupId)
     }
 
     fun deleteMsg(msg: MsgInfo) {

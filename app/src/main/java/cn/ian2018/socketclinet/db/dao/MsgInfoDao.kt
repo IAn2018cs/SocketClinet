@@ -15,8 +15,14 @@ interface MsgInfoDao {
     @Insert
     fun insertMsg(msg: MsgInfo)
 
-    @Query("SELECT * FROM msgInfo")
-    fun getAllMsg(): List<MsgInfo>
+    @Insert
+    fun insertMsgList(msg: List<MsgInfo>)
+
+    @Query("SELECT * FROM msgInfo WHERE groupId = -1 AND fromId = :fromId")
+    fun getAllMsg(fromId: String): List<MsgInfo>
+
+    @Query("SELECT * FROM msgInfo WHERE groupId = :groupId")
+    fun getGroupMsg(groupId: Int): List<MsgInfo>
 
     @Delete
     fun deleteMsg(msg: MsgInfo)

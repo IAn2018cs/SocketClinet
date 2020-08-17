@@ -8,8 +8,6 @@ import android.content.Context;
 public class SPUtil {
     private static final String SP_NAME = "e2eesp";
 
-    public static String userList = "";
-
     public static void saveId(Context context, String id) {
         context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).edit().putString("user_id", id).apply();
     }

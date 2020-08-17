@@ -3,11 +3,12 @@ package cn.ian2018.socketclinet.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.ian2018.socketclinet.R
 import cn.ian2018.socketclinet.adapter.MsgAdapter
+import cn.ian2018.socketclinet.api.bean.GroupData
+import cn.ian2018.socketclinet.api.bean.UserData
 import cn.ian2018.socketclinet.db.RepositoryProvider
 import cn.ian2018.socketclinet.db.data.MsgInfo
 import cn.ian2018.socketclinet.db.repository.MsgInfoRepository
@@ -28,7 +29,11 @@ class MainActivity : AppCompatActivity() {
     private val mMsgList: MutableList<MsgInfo> = ArrayList()
     private var adatper: MsgAdapter = MsgAdapter(mMsgList)
 
-    private var otherId: String? = null
+    private var type = -1
+
+    private lateinit var userData: UserData
+    private lateinit var groupData: GroupData
+
     private lateinit var msgInfoRepository: MsgInfoRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,39 +41,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         EventBus.getDefault().register(this)
 
-        otherId = intent.getStringExtra("other")
+        msgInfoRepository = RepositoryProvider.providerMsgInfoRepository(this)
 
-        savedInstanceState?.let { onRestoreInstanceState(it) }
+        type = intent.getIntExtra("type", -1)
+
+        if (type == 1) {
+            userData = intent.getParcelableExtra("userData")
+        } else {
+            groupData = intent.getParcelableExtra("groupData")
+        }
 
         initView()
 
-        msgInfoRepository = RepositoryProvider.providerMsgInfoRepository(this)
         CoroutineScope(Dispatchers.Main).launch {
-            val allMsg = msgInfoRepository.getAllMsg()
+            val allMsg = if (type == 1) {
+                msgInfoRepository.getAllMsg(userData.userId)
+            } else {
+                msgInfoRepository.getGroupMsg(groupData.groupId)
+            }
             mMsgList.addAll(allMsg)
             adatper.notifyDataSetChanged()
             chart_recycler.scrollToPosition(mMsgList.size - 1)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (TextUtils.isEmpty(otherId)) {
-            finish()
-        } else {
-            SocketService.connect(this, otherId)
-        }
-    }
-
-    public override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("other", otherId)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        otherId = savedInstanceState.getString("other")
-        SocketService.connect(this, otherId)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -93,10 +87,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun sendMsg(data: String) {
-        SocketService.chart(this, data)
-        val massage = MsgInfo(data, MsgInfo.TYPE_SEND, "", System.currentTimeMillis())
+        val massage = if (type == 1) {
+            SocketService.chart(this, data, userData.userId, userData.publicKey)
+            MsgInfo(data, MsgInfo.TYPE_SEND, "", System.currentTimeMillis(), fromId = SPUtil.getId(this))
+        } else {
+            SocketService.chartGroup(this, groupData.groupId, data, groupData.members)
+            MsgInfo(data, MsgInfo.TYPE_SEND, "", System.currentTimeMillis(), groupId = groupData.groupId, fromId = SPUtil.getId(this))
+        }
         mMsgList.add(massage)
         adatper.notifyItemChanged(mMsgList.size - 1)
         chart_recycler.scrollToPosition(mMsgList.size - 1)
@@ -105,22 +103,34 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun receivedMsg(data: MsgInfo) {
-        mMsgList.add(data)
-        adatper.notifyItemChanged(mMsgList.size - 1)
-        chart_recycler!!.scrollToPosition(mMsgList.size - 1)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        SPUtil.userList = ""
+        if (type == 1) {
+            if (data.groupId == -1 && data.fromId == userData.userId) {
+                mMsgList.add(data)
+                adatper.notifyItemChanged(mMsgList.size - 1)
+                chart_recycler!!.scrollToPosition(mMsgList.size - 1)
+            }
+        } else {
+            if (data.groupId == groupData.groupId) {
+                mMsgList.add(data)
+                adatper.notifyItemChanged(mMsgList.size - 1)
+                chart_recycler!!.scrollToPosition(mMsgList.size - 1)
+            }
+        }
     }
 
     companion object {
-
-        @JvmStatic
-        fun start(context: Context, other: String?) {
+        fun start(context: Context, userData: UserData) {
             val starter = Intent(context, MainActivity::class.java)
-            starter.putExtra("other", other)
+            starter.putExtra("type", 1)
+            starter.putExtra("userData", userData)
+            starter.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(starter)
+        }
+
+        fun start(context: Context, groupData: GroupData) {
+            val starter = Intent(context, MainActivity::class.java)
+            starter.putExtra("type", 2)
+            starter.putExtra("groupData", groupData)
             starter.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(starter)
         }

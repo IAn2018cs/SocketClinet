@@ -14,7 +14,10 @@ data class MsgInfo(
         @ColumnInfo(name = "msg") val msg: String,
         @ColumnInfo(name = "type") val type: Int,
         @ColumnInfo(name = "ip") val ip: String,
-        @ColumnInfo(name = "time") val time: Long
+        @ColumnInfo(name = "time") val time: Long,
+        @ColumnInfo(name = "groupId", defaultValue = "-1") val groupId: Int = -1,
+        @ColumnInfo(name = "serviceMsgId") val serviceMsgId: Int = -1,
+        @ColumnInfo(name = "fromId") val fromId: String = ""
 ) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

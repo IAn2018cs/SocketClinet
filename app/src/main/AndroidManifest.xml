@@ -20,10 +20,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTask" />
+
+        <activity android:name=".activity.ChooseChartActivity" />
         <activity android:name=".activity.ChooseActivity" />
+        <activity android:name=".activity.ChooseGroupActivity" />
+        <activity android:name=".activity.CreateGroupActivity" />
+        <activity android:name=".activity.JoinGroupActivity" />
+
         <activity android:name=".activity.TestActivity">
 
         </activity>

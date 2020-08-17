@@ -1,7 +1,5 @@
 package cn.ian2018.socketclinet.adapter;
 
-import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,47 +11,37 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.ian2018.socketclinet.AppContext;
 import cn.ian2018.socketclinet.R;
-import cn.ian2018.socketclinet.api.bean.UserData;
-import cn.ian2018.socketclinet.util.SPUtil;
+import cn.ian2018.socketclinet.api.bean.GroupData;
 
 /**
- * Created by chenshuai on 2020/8/7
+ * Created by chenshuai on 2020/8/14
  */
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
+public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
 
-    private List<UserData> list = new ArrayList<>();
+    private List<GroupData> list = new ArrayList<>();
 
     private OnItemClick onItemClick;
-    private Context context;
-
-    public UserAdapter() {
-        this.context = AppContext.context;
-    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user, parent, false);
+        View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group, parent, false);
         return new ViewHolder(inflate);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        UserData userData = list.get(position);
-        holder.textView.setText(userData.getUserId());
+        GroupData groupData = list.get(position);
+        holder.nameTv.setText("name: " + groupData.getGroupName());
+        holder.ownerTv.setText("创建者: " + groupData.getOwner());
+        holder.shareCodeTv.setText("share code: " + groupData.getShareCode());
         holder.itemView.setOnClickListener(v -> onItemClick.onItemClink(list.get(position)));
     }
 
-    public void setList(List<UserData> list) {
+    public void setList(List<GroupData> list) {
         this.list.clear();
-        for (UserData userData : list) {
-            if (TextUtils.equals(SPUtil.getId(context), userData.getUserId())) {
-                continue;
-            }
-            this.list.add(userData);
-        }
+        this.list.addAll(list);
         notifyDataSetChanged();
     }
 
@@ -64,11 +52,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textView;
+        private TextView nameTv;
+        private TextView ownerTv;
+        private TextView shareCodeTv;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.tv_user);
+            nameTv = itemView.findViewById(R.id.tv_name);
+            ownerTv = itemView.findViewById(R.id.tv_owner);
+            shareCodeTv = itemView.findViewById(R.id.tv_share_code);
         }
     }
 
@@ -77,6 +69,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 
     public interface OnItemClick {
-        void onItemClink(UserData userData);
+        void onItemClink(GroupData groupData);
     }
 }

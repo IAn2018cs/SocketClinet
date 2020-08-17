@@ -74,6 +74,8 @@ dependencies {
     implementation "com.amber.lib.net:net:$netVersion"
     implementation "com.amber.lib.net:impl:$netImpVersion"
     implementation "com.amber.lib.security:security:$securityVersion"
+
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }
 
 tasks.withType(JavaCompile) {
