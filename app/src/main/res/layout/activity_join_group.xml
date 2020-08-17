@@ -7,13 +7,14 @@
     <EditText
         android:id="@+id/codeEt"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:hint="输入群组分享码" />
 
     <Button
-        android:onClick="join"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:onClick="join"
         android:text="加入" />
 
 
