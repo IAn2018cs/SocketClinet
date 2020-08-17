@@ -96,6 +96,8 @@ class SocketService : Service() {
     }
 
     private fun start() {
+        webSocket?.close(0,"onReStart")
+        webSocket?.cancel()
         RxWebSocket.get("ws://${E2eeApi.IP}:9503")
                 .subscribe(object : WebSocketSubscriber() {
                     public override fun onOpen(webSocket: WebSocket) {
@@ -181,6 +183,12 @@ class SocketService : Service() {
         EventBus.getDefault().post(ReceivedMsgEvent(msgInfo))
 
         return msgInfo
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        webSocket?.close(0,"onDestroy")
+        webSocket?.cancel()
     }
 
     companion object {
